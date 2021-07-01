@@ -20,7 +20,7 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
-    communications: {
+    conversations: {
         type: Array,
         required: false
     }

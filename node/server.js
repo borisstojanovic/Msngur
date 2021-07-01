@@ -30,6 +30,7 @@ app.use(bodyParser.urlencoded({extended : false}));
 
 //db setup
 const db = require("./models");
+
 const dbConfig = require("./config/database");
 db.mongoose
     .connect(dbConfig.URL, {

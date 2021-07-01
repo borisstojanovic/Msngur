@@ -81,7 +81,7 @@ route.post("/register", bodyParser.json(), (req, res) => {
             return;
         }
 
-        res.send({ message: "User was registered successfully!" });
+        res.send({ message: "User was registered successfully!" , user: user});
     });
 
 });
