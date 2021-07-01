@@ -6,6 +6,12 @@ const db = require("../models");
 const User = db.user;
 const Group = db.group;
 const { authJwt } = require("../middleware");
+const fs = require('fs');
+const { cloudinary } = require('../config/cloudinary');
+
+//multer setup
+const uploads = require('./uploads');
+const images = uploads.images;
 
 const scheme = Joi.object().keys({
     owner: Joi.string().required(),
@@ -18,19 +24,47 @@ const addScheme = Joi.object().keys({
     group: Joi.string().required()
 })
 
+const removeFile = function(path){
+    fs.unlink(path, (err) => {
+        if(err){
+            throw new Error(err.message);
+        }
+    })
+}
+
+const uploadToCloudinary = function(image) {
+    return new Promise((resolve, reject) => {
+        let response = cloudinary.uploader.upload(image, (err, url) => {
+            if (err) return reject(err);
+            return resolve(response);
+        })
+    });
+}
+
 /**
  * Creates a new group with the given owner/admin, name and members
  * Then it adds the new group to each members conversations and saves them
  */
-route.post('/create', [authJwt.verifyToken], bodyParser.json(), (req, res) => {
+route.post('/create', [authJwt.verifyToken], images.single('image'), (req, res) => {
     let {error} = Joi.validate(req.body, scheme);
     if (error) return res.status(400).send(error.details[0].message);
 
-    User.findOne({_id: req.body.owner}, (err, user) => {
+    User.findOne({_id: req.body.owner}, async (err, user) => {
         if (err) res.status(500).json("Something went wrong.")
         else if (!user) res.status(404).json("No such user.")
         else {
-            const group = new Group({admin: user, member: [user._id], name: req.body.name})
+            let path = null;
+            if(req.file !== undefined){
+                let uploadedResponse = null;
+                await uploadToCloudinary(path).then(response => {
+                    uploadedResponse = response;
+                }).catch(err=>{
+                    return res.sendStatus(500).json(err);
+                })
+                path = uploadedResponse.public_id;
+                removeFile(req.file.path);
+            }
+            const group = new Group({admin: user, member: [user._id], name: req.body.name, imagePath: path})
             group.save((err, group) => {
                 if (err) {
                     res.status(500).send({message: err});

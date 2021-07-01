@@ -5,7 +5,13 @@ const bodyParser = require('body-parser')
 const config = require("../config/auth");
 const db = require("../models");
 const User = db.user;
+const fs = require('fs');
 let jwt = require("jsonwebtoken");
+const { cloudinary } = require('../config/cloudinary');
+
+//multer setup
+const uploads = require('./uploads');
+const images = uploads.images;
 
 const scheme = Joi.object().keys({
     username: Joi.string().trim().min(3).max(12).required(),
@@ -63,15 +69,44 @@ route.post("/signin", bodyParser.json(), (req, res) => {
     })
 });
 
-route.post("/register", bodyParser.json(), (req, res) => {
+const removeFile = function(path){
+    fs.unlink(path, (err) => {
+        if(err){
+            throw new Error(err.message);
+        }
+    })
+}
+
+const uploadToCloudinary = function(image) {
+    return new Promise((resolve, reject) => {
+        let response = cloudinary.uploader.upload(image, (err, url) => {
+            if (err) return reject(err);
+            return resolve(response);
+        })
+    });
+}
+
+route.post("/register", images.single('image'), async (req, res) => {
     let {error} = Joi.validate(req.body, schemeRegister);
     if (error) {
         return res.status(400).send(error.details[0].message);
     }
+    let path = null;
+    if(req.file !== undefined){
+        let uploadedResponse = null;
+        await uploadToCloudinary(path).then(response => {
+            uploadedResponse = response;
+        }).catch(err=>{
+            return res.sendStatus(500).json(err);
+        })
+        path = uploadedResponse.public_id;
+        removeFile(req.file.path);
+    }
     const user = new User({
         username: req.body.username,
         email: req.body.email,
-        password: req.body.password
+        password: req.body.password,
+        path: path
     });
 
     //when save is called the password is encrypted automatically because of the pre function in user.model

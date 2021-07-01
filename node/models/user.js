@@ -8,7 +8,7 @@ const UserSchema = new Schema({
     username: {
         type: String,
         required: true,
-        unique: false
+        unique: true
     },
     email: {
         type: String,
@@ -19,6 +19,10 @@ const UserSchema = new Schema({
     password: {
         type: String,
         required: true
+    },
+    path: {
+        type: String,
+        required: false
     },
     conversations: {
         type: Array,

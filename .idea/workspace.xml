@@ -19,13 +19,17 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ce8c0cb3-15a8-4859-86d7-5d899ef72300" name="Default Changelist" comment="Getting users by id, username and all users added">
-      <change afterPath="$PROJECT_DIR$/node/routes/online.js" afterDir="false" />
+    <list default="true" id="ce8c0cb3-15a8-4859-86d7-5d899ef72300" name="Default Changelist" comment="Setup socket.io and finalized the backend">
+      <change afterPath="$PROJECT_DIR$/node/.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node/config/cloudinary.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node/routes/uploads.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node/models/group.js" beforeDir="false" afterPath="$PROJECT_DIR$/node/models/group.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node/models/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/node/models/user.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/node/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/node/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node/routes/message.js" beforeDir="false" afterPath="$PROJECT_DIR$/node/routes/message.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node/routes/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/node/routes/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node/routes/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/node/routes/auth.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node/routes/group.js" beforeDir="false" afterPath="$PROJECT_DIR$/node/routes/group.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/node/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/node/server.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -52,6 +56,9 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="javascript.nodejs.core.library.configured.version" value="14.15.0" />
+    <property name="javascript.nodejs.core.library.typings.version" value="14.17.4" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/node/routes" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -60,6 +67,13 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Boris Stojanovic.DESKTOP-RJ3J14U\WebstormProjects\Msgur\node\routes" />
+      <recent name="C:\Users\Boris Stojanovic.DESKTOP-RJ3J14U\WebstormProjects\Msgur\node" />
+      <recent name="C:\Users\Boris Stojanovic.DESKTOP-RJ3J14U\WebstormProjects\Msgur\node\config" />
+    </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -70,7 +84,7 @@
       <option name="presentableId" value="Default" />
       <updated>1625104534619</updated>
       <workItem from="1625104535664" duration="8236000" />
-      <workItem from="1625138530352" duration="19742000" />
+      <workItem from="1625138530352" duration="21633000" />
     </task>
     <task id="LOCAL-00001" summary="Renamed some of the files">
       <created>1625141084822</created>
@@ -100,11 +114,21 @@
       <option name="project" value="LOCAL" />
       <updated>1625156295856</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Setup socket.io and finalized the backend">
+      <created>1625180326081</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1625180326081</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.env" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -121,12 +145,13 @@
     <MESSAGE value="Renamed some of the files" />
     <MESSAGE value="Creating groups, adding members, removing members and deleting groups added" />
     <MESSAGE value="Getting users by id, username and all users added" />
-    <option name="LAST_COMMIT_MESSAGE" value="Getting users by id, username and all users added" />
+    <MESSAGE value="Setup socket.io and finalized the backend" />
+    <option name="LAST_COMMIT_MESSAGE" value="Setup socket.io and finalized the backend" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1625156303832">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1625180328880">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1625156303832" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1625180328880" />
   </component>
 </project>

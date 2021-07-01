@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http');
 const socketio = require('socket.io');
+const path = require('path');
 
 //routes
 const users = require('./routes/user');
@@ -12,7 +13,7 @@ const history = require('connect-history-api-fallback');
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 const cors = require('cors');
 app.use(cors({origin:true,credentials: true}));
 
@@ -29,9 +30,10 @@ function setupCORS(req, res, next) {
 }
 
 app.all('/*', setupCORS)
+const staticMiddleware = express.static(path.join(__dirname, 'dist'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : false}));
-
+app.use('/images', express.static('images'));
 //db setup
 const db = require("./models");
 
@@ -53,7 +55,9 @@ app.use('/users', users);
 app.use('/auth', auth);
 app.use('/groups', groups);
 app.use('/messages', messageRouter);
+app.use(staticMiddleware);
 app.use(history());
+app.use(staticMiddleware);
 app.listen(8080);
 
 const jwt = require("jsonwebtoken");

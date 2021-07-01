@@ -10,6 +10,10 @@ const GroupSchema = new Schema({
         type: Array,
         required: false
     },
+    imagePath: {
+        type: String,
+        required: false
+    },
     name: {
         type: String,
         required: true
