@@ -5,8 +5,8 @@ const db = {};
 
 db.mongoose = mongoose;
 
-db.user = require("./user.model");
-db.message = require("./message.model");
-db.group = require("./group.model")
+db.user = require("./user");
+db.message = require("./message");
+db.group = require("./group")
 
 module.exports = db;

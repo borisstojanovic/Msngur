@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ce8c0cb3-15a8-4859-86d7-5d899ef72300" name="Default Changelist" comment="" />
+    <list default="true" id="ce8c0cb3-15a8-4859-86d7-5d899ef72300" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node/config/auth.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node/config/database.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node/middleware/authJwt.js" beforeDir="false" afterPath="$PROJECT_DIR$/node/middleware/authJwt.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node/models/group.model.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node/models/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/node/models/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node/models/message.model.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node/models/user.model.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node/routes/auth.routes.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node/routes/user.routes.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/node/server.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,7 +26,11 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1uh4YTrmGDBOmaXsgHORFU4Ms5D" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -39,7 +55,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1625104534619</updated>
-      <workItem from="1625104535664" duration="7903000" />
+      <workItem from="1625104535664" duration="8236000" />
+      <workItem from="1625138530352" duration="593000" />
     </task>
     <servers />
   </component>

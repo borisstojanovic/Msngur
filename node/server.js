@@ -1,8 +1,10 @@
 const express = require('express');
 
 //routes
-const users = require('./routes/user.routes');
-const auth = require('./routes/auth.routes');
+const users = require('./routes/user');
+const auth = require('./routes/auth');
+const groups = require('./routes/group');
+const messages = require('./routes/message');
 const history = require('connect-history-api-fallback');
 
 const app = express();
@@ -28,7 +30,7 @@ app.use(bodyParser.urlencoded({extended : false}));
 
 //db setup
 const db = require("./models");
-const dbConfig = require("./config/database.config");
+const dbConfig = require("./config/database");
 db.mongoose
     .connect(dbConfig.URL, {
         useNewUrlParser: true,
@@ -44,5 +46,7 @@ db.mongoose
 
 app.use('/users', users);
 app.use('/auth', auth);
+app.use('/groups', groups);
+app.use('/messages', messages);
 app.use(history());
 app.listen(8080);
