@@ -20,60 +20,81 @@ route.post("/new", [authJwt.verifyToken], bodyParser.json(), (req, res) => {
 
 });
 
-const createMessage = async (sender, recipient, message) => {
-    let _info = null;
-    await User.findOne({_id: sender, token: userToken})
+/**
+ * Creates a new message in a private chat using sender and recipient ids
+ * This function is used in socket.io websocket and isn't part of the routes
+ * @param sender
+ * @param recipient
+ * @param message
+ * @returns {Promise<null>}
+ */
+const createUserMessage = async (sender, recipient, message) => {
+    let response = null;
+    await User.findOne({_id: sender})
         .then(async user => {
-            if(user) await User.findOne({email: recipient})
-                .then(_user => {
-                    if(_user){
-                        if(!_user.communications.includes(sender)){
-                            _user.communications.push(sender);
-                            _user.save();
+            if(user) await User.findOne({_id: recipient})
+                .then(recipientUser => {
+                    if(recipientUser){
+                        if(!recipientUser.conversations.includes(user._id)){
+                            recipientUser.conversations.push(user._id);
+                            recipientUser.save();
                         }
-                        const _message = new Message({recipient: _user._id, sender: sender, message: message})
-                        _message.save()
-                        _info = {
-                            recipient: {email: _user.email, id: _user._id}, sender: {email: user.email, id: user._id},
-                            iv: encryptedMessage.iv, message: encryptedMessage.encryptedMessage, key: encryptedMessage.key
+                        const newMessage = new Message({recipient: recipientUser._id, sender: user._id, message: message})
+                        newMessage.save()
+                        response = {
+                            recipient: {username: recipientUser.username, id: recipientUser._id}, sender: {username: user.username, id: user._id},
+                            message: message
                         }
                     }
                 })
         })
-    return _info;
+    return response;
 }
 
-const createGroupMessage = async (sender, userToken, group, message) => {
-    let _info = null;
-    await User.findOne({_id: sender, token: userToken})
+/**
+ * Creates a new message in a group chat using sender and recipient ids where the recepient id is a group
+ * This function is used in socket.io websocket and isn't part of the routes
+ * @param sender
+ * @param group
+ * @param message
+ * @returns {Promise<null>}
+ */
+const createGroupMessage = async (sender, group, message) => {
+    let response = null;
+    await User.findOne({_id: sender})
         .then(async user => {
             if(user) await Group.findOne({_id: group})
                 .then(group => {
                     if(group){
-                        const encryptedMessage = encrypt(message);
-                        const _message = new Message({recipient: group._id, sender, iv: encryptedMessage.iv, message: encryptedMessage.encryptedMessage, key: encryptedMessage.key})
-                        _message.save()
-                        _info = {
-                            recipient: {id: group._id, member: group.member, code: group.code}, sender: {email: user.email, id: user._id},
-                            iv: encryptedMessage.iv, message: encryptedMessage.encryptedMessage, key: encryptedMessage.key
+                        const newMessage = new Message({recipient: group._id, sender: user._id, message: message})
+                        newMessage.save()
+                        response = {
+                            recipient: {id: group._id, member: group.member, name: group.name}, sender: {username: user.username, id: user._id},
+                            message: message
                         }
                     }
                 })
         })
-    return _info
+    return response
 }
 
-const startMessage = async (sender, userToken, recipient) => {
-    User.findOne({_id: sender, token: userToken}, (err, user) => {
+/**
+ * Used to start a new private conversation between two users
+ * @param sender
+ * @param recipient
+ * @returns {Promise<void>}
+ */
+const startMessage = async (sender, recipient) => {
+    User.findOne({_id: sender}, (err, user) => {
         if(err) return null;
         else if(!user) return null;
         else{
-            User.findOne({email: recipient}, async (err, _user) => {
+            User.findOne({id_: recipient}, async (err, _user) => {
                 if(err) return null;
                 else if(!_user) return null;
                 else{
-                    if(!user.communications.includes(_user._id) && sender !== recipient){
-                        user.communications.push(_user._id)
+                    if(!user.conversations.includes(_user._id) && sender !== recipient){
+                        user.conversations.push(_user._id)
                         await user.save()
                             .then(() => {return true})
                             .catch(() => {return null;})
@@ -84,7 +105,7 @@ const startMessage = async (sender, userToken, recipient) => {
     })
 }
 
-route.get('/get_messages', bodyParser.json(), (req, res) => {
+route.get('/all/:recipientId', [authJwt.verifyToken], (req, res) => {
     const {user, token, target} = req.body;
     User.findOne({_id: user, token}, (err, user) => {
         if(err) res.status(500).json("Something went wrong.");
@@ -129,7 +150,7 @@ route.get('/get_messages', bodyParser.json(), (req, res) => {
     })
 })
 
-route.get('/getMessagesForGroup', bodyParser.json(), (req, res) => {
+route.get('/getMessagesForGroup/:groupId', [authJwt.verifyToken], (req, res) => {
     const {user, token, target} = req.body;
     User.findOne({_id: user, token}, (err, user) => {
         if(err) res.status(500).json("Something went wrong.");
@@ -168,4 +189,4 @@ route.get('/getMessagesForGroup', bodyParser.json(), (req, res) => {
     })
 })
 
-module.exports =  route
+module.exports = {createUserMessage, messageRouter: route, startMessage, createGroupMessage}

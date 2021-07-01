@@ -41,4 +41,45 @@ route.get('/getByUsernameLike/:username', [authJwt.verifyToken], (req, res) => {
     })
 })
 
+const deleteConversation = (array, value) => {
+    let newArray = [];
+    for(let i = 0; i< array.length; i++){
+        if(String(array[i]) !== String(value)){
+            newArray.push(array[i])
+        }
+    }
+    return newArray;
+}
+
+/**
+ * Adds the user whose id matches userId request parameter to the conversations array of the logged in user
+ * At the same time adds the logged in user to the conversations array of the user with userId
+ */
+route.post('/addConversation', [authJwt.verifyToken], bodyParser.json(), (req, res) => {
+    if(req.userId === req.body.user)return res.status(404).json("Bad Request");
+
+    User.findOne({_id: req.userId})
+        .then(user => {
+            if(user.conversations.includes(req.body.user))return res.status(404).json("Conversation already exists!");
+            user.conversations.push(req.body.user);
+            user.save()
+                .then(() => {
+                    User.findOne({_id: req.body.user})
+                        .then(member => {
+                            member.conversations.push(user._id);
+                            member.save()
+                                .then(() => res.status(200).json(user))
+                                .catch(err => res.status(500).json(err))
+                        })
+                        .catch(err => {
+                            user.conversations = deleteConversation(user.conversations, req.body.user);
+                            user.save()
+                                .then(() => res.status(404).json("User Does Not Exist!"))
+                                .catch(err => res.status(500).json(err))
+                        })
+                })
+                .catch(err => res.status(500).json(err))
+        })
+})
+
 module.exports = route
