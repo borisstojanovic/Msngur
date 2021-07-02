@@ -15,7 +15,8 @@ const images = uploads.images;
 
 const scheme = Joi.object().keys({
     owner: Joi.string().required(),
-    name: Joi.string().min(3).max(24).required()
+    name: Joi.string().min(3).max(24).required(),
+    member: Joi.array()
 })
 
 const addScheme = Joi.object().keys({
@@ -65,7 +66,7 @@ route.post('/create', [authJwt.verifyToken], images.single('image'), async (req,
                 path = uploadedResponse.public_id;
                 removeFile(req.file.path);
             }
-            const group = new Group({admin: user, member: [user._id], name: req.body.name, imagePath: path})
+            const group = new Group({admin: user, member: req.body.member, name: req.body.name, imagePath: path})
             group.save((err, group) => {
                 if (err) {
                     res.status(500).send({message: err});
@@ -95,6 +96,9 @@ route.post('/add', [authJwt.verifyToken], bodyParser.json(), (req, res) => {
                 if(err) res.status(500).json("Something went wrong.")
                 else if(!group) res.status(404).json("Group not found.")
                 else{
+                    if(group.private === "private"){
+                        return res.status(404).json({message: "Can't add users to a private chat!"})
+                    }
                     let groupId = group._id;
                     User.findOne({_id: req.body.user}, (err, user) => {
                         if(err) res.status(500).json("Something went wrong.")
@@ -190,6 +194,7 @@ route.delete('/delete/:groupId', [authJwt.verifyToken], async (req, res) => {
 route.post('/removeMember',[authJwt.verifyToken] ,bodyParser.json(), (req, res) => {
     Group.findOne({_id: req.body.group})
         .then(group => {
+            if(group.private === true) res.status(404).json({message: "Can't remove users from a private chat!"})
             if(String(group.admin) === req.body.user)return res.status(404).json({message: "Admin can't leave his own group"})
             if(String(group.admin) !== req.userId && req.body.user !== req.userId)res.status(403).json({message: "Forbidden Access"});
             else{

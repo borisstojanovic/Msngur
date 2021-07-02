@@ -17,6 +17,10 @@ const GroupSchema = new Schema({
     name: {
         type: String,
         required: true
+    },
+    type:{
+        type: Boolean,
+        required: true
     }
 }, {
     timestamps: true
