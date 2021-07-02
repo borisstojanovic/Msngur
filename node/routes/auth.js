@@ -94,9 +94,10 @@ route.post("/register", images.single('image'), async (req, res) => {
     let path = null;
     if(req.file !== undefined){
         let uploadedResponse = null;
-        await uploadToCloudinary(path).then(response => {
+        await uploadToCloudinary(req.file.path).then(response => {
             uploadedResponse = response;
         }).catch(err=>{
+            removeFile(req.file.path);
             return res.sendStatus(500).json(err);
         })
         path = uploadedResponse.public_id;
